@@ -1,19 +1,8 @@
-use axum::{
-    extract::Extension,
-    response::IntoResponse,
-    routing,
-    Router,
-};
-use chrono::{
-    DateTime,
-    Utc,
-};
+use axum::{extract::Extension, response::IntoResponse, routing, Router};
+use chrono::{DateTime, Utc};
 
 use crate::controllers::tweets;
-use crate::database::{
-    self,
-    ConnectionPool,
-};
+use crate::database::{self, ConnectionPool};
 use crate::response;
 use crate::views::{Home, Tweet};
 
@@ -27,7 +16,8 @@ pub async fn app() -> Router {
 
 async fn get(pool: Extension<ConnectionPool>) -> impl IntoResponse {
     let conn = pool.get().await.unwrap();
-    let rows = conn.query("SELECT * FROM tweets ORDER BY posted_at DESC", &[])
+    let rows = conn
+        .query("SELECT * FROM tweets ORDER BY posted_at DESC", &[])
         .await
         .unwrap();
     let tweets = rows
